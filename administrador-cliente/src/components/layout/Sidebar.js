@@ -1,8 +1,9 @@
 import React from 'react'
 import NuevoProyecto from '../proyectos/NuevoProyecto';
+import ListadoProyectos from '../proyectos/ListadoProyectos';
 
 
- //2.0-Generar estructura del Sidebar html
+ //4.0-Generar estructura del Sidebar html
 const Sidebar = () => {
     return ( 
         <aside>
@@ -11,6 +12,7 @@ const Sidebar = () => {
                 <NuevoProyecto/>
                 <div className="proyectos">
                     <h2>Tus proyectos</h2>
+                    <ListadoProyectos/>
                 </div>
                 
             </div>
