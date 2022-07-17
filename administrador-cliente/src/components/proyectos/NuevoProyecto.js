@@ -1,9 +1,17 @@
-import React,{ Fragment, useState } from 'react';
+import React,{ Fragment, useState, useContext } from 'react';
+import proyectoContext from '../../context/proyectos/proyectoContext';
+//import proyectoReducer from '../../context/proyectos/proyectoReducer';
 
 
 
  //5.0-Generar estructura del componente boton 'Nuevo Proyecto' html
 const NuevoProyecto = () => {
+    //5.5-Obtener State del formulario a traves de Context
+    const proyectosContext = useContext(proyectoContext);
+    const { formulario, mostrarFormulario } = proyectosContext;
+
+    
+
     //5.1-Iniciar Staet de NuevoProyecto
     const [proyecto, guardarProyecto] = useState({
         nombre: ''
@@ -30,31 +38,45 @@ const NuevoProyecto = () => {
         }
         
     }
+    //Funcion para mostrar el formulario de 
+    const onClickFormulario = () => {
+        mostrarFormulario();
+    }
 
     return ( 
         <Fragment>
             <button 
                 type="button" 
                 className="btn btn-block btn-primario"
-            >Nuevo Proyecto</button>
-            <form onSubmit={onSubmitProyecto} className='formulario-nuevo-proyecto'>
-                <div className="form-group">
-                    <input 
-                        type="text"
-                        className="input-text"
-                        placeholder="Nombre Proyecto"
-                        name="nombre"
-                        value={nombre}
-                        onChange={onChangeProyecto}
-                        
-                    />
-                </div>
-                <button 
-                    type="submit" 
-                    className="btn btn-block btn-primario" 
-                    value="Agregar Proyecto"
-                >Agregar</button>
-            </form>
+                onClick={ onClickFormulario }
+            >
+            Nuevo Proyecto
+            </button>
+            { //5.5.1-Creamos un ternario para mostrar el formulario o ocultarlo 
+                formulario ?
+                   (  
+                    <form onSubmit={onSubmitProyecto} className='formulario-nuevo-proyecto'>
+                        <div className="form-group">
+                            <input 
+                                type="text"
+                                className="input-text"
+                                placeholder="Nombre Proyecto"
+                                name="nombre"
+                                value={nombre}
+                                onChange={onChangeProyecto}
+                                
+                            />
+                        </div>
+                        <button 
+                            type="submit" 
+                            className="btn btn-block btn-primario" 
+                            value="Agregar Proyecto"
+                        >Agregar</button>
+                    </form>
+                    )
+                : null
+            }
+            
         </Fragment>
      );
 }
