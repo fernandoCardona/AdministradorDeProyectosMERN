@@ -8,7 +8,7 @@ import proyectoContext from '../../context/proyectos/proyectoContext';
 const NuevoProyecto = () => {
     //5.5-Obtener State del formulario a traves de Context
     const proyectosContext = useContext(proyectoContext);
-    const { formulario, mostrarFormulario } = proyectosContext;
+    const { formulario, errorformulario, mostrarFormulario, agregarProyecto, mostrarError } = proyectosContext;
 
     
 
@@ -30,13 +30,20 @@ const NuevoProyecto = () => {
     //5.4-Cuando el usuario envia el nombre del proyecto
     const onSubmitProyecto = e => {
         e.preventDefault();
-        console.log(proyecto);
-        //5.4.1-Validar que el nombre del proyecto no este vacio
-        if (nombre.trim() === '') {
-            console.log('El nombre del proyecto es obligatorio');
+
+        // Validar el proyecto
+        if( nombre === '' ) {
+            mostrarError();
             return;
         }
-        
+
+        // agregar al state
+        agregarProyecto(proyecto)
+
+        // Reiniciar el form
+        guardarProyecto({
+            nombre: ''
+        })
     }
     //Funcion para mostrar el formulario de 
     const onClickFormulario = () => {
@@ -74,7 +81,10 @@ const NuevoProyecto = () => {
                         >Agregar</button>
                     </form>
                     )
-                : null
+                : null }
+
+            { //5.5.2-Creamos un ternario para mostrar el error o ocultarlo
+                errorformulario ? <p className="mensaje error">El nombre del Proyecto es obligatorio</p>  : null 
             }
             
         </Fragment>
