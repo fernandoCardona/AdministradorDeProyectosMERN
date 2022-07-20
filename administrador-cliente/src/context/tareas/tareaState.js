@@ -2,13 +2,18 @@
 import React, { useReducer } from 'react';
 import TareaContext from './tareaContext';
 import TareaReducer from './tareaReducer';
+import { v4 as uuidv4 } from 'uuid';
+
 
 import { 
     TAREAS_PROYECTO,
     AGREGAR_TAREAS,
     VALIDAR_TAREA,
     ELIMINAR_TAREA,
-    ESTADO_TAREA
+    ESTADO_TAREA,
+    TAREA_ACTUAL,
+    ACTUALIZAR_TAREA,
+    LIMPIAR_TAREA
 } from '../../types';
 
 const TareaState = props => {
@@ -34,7 +39,8 @@ const TareaState = props => {
         {id: 18, nombre: 'Integrar Db nueva', estado: true, proyectoId:5}
     ],
     tareasproyecto:null,
-    errortarea: false
+    errortarea: false,
+    tareaseleccionada: null
 
 
 
@@ -52,6 +58,7 @@ const TareaState = props => {
     }
     // agregar tareas al proyecto seleccionado
     const agregarTarea = tarea => {
+        tarea.id = uuidv4();
         dispatch({
             type: AGREGAR_TAREAS,
             payload: tarea
@@ -77,6 +84,28 @@ const TareaState = props => {
             payload: tarea
         })
     }
+    // obtener la tarea actual para edicion
+    const guardarTareaActual = tarea => {
+        dispatch({
+            type: TAREA_ACTUAL,
+            payload: tarea
+        })
+    }
+    // actualizar tarea
+    const actualizarTarea = tarea => {
+        dispatch({
+            type: ACTUALIZAR_TAREA,
+            payload: tarea
+        })
+    }
+    // limpiar tarea actual
+    const limpiarTarea = () => {
+        dispatch({
+            type: LIMPIAR_TAREA
+        })
+    }
+
+
 
 
     return (
@@ -84,11 +113,15 @@ const TareaState = props => {
             tareas: state.tareas,
             tareasproyecto: state.tareasproyecto,
             errortarea: state.errortarea,
+            tareaseleccionada: state.tareaseleccionada,
             obtenerTareas,
             agregarTarea,
             validarTarea,
             eliminarTarea,
-            cambiarEstadoTarea
+            cambiarEstadoTarea,
+            guardarTareaActual,
+            actualizarTarea,
+            limpiarTarea
         }}>
             {props.children}
         </TareaContext.Provider>
