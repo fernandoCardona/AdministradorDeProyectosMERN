@@ -1,7 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AlertaContext from '../../context/alertas/alertaContext';
+import AuthContext from '../../context/autenticacion/authContext';
+
 
 const NuevaCuenta = () => {
+    //2.4- Importar el context de alertas
+    const alertaContext = useContext(AlertaContext);
+    const {alerta, mostrarAlerta} = alertaContext;
+
+    const authContext = useContext(AuthContext);
+    const { mensaje, autenticado, registrarUsuario } = authContext;
+
+
     //2.0-Generar estructura del formulario html
     //2.1-Stete para iniciar session
     const [usuario, guardarUsuario] = useState({
@@ -27,20 +38,21 @@ const NuevaCuenta = () => {
         console.log(usuario);
         //2.3.1-Validar que los campos no esten vacios
         if (nombre.trim() === '' || email.trim() === '' || password.trim() === '' || confirmar.trim() === '') {
-            console.log('Los campos son obligatorios');
+            mostrarAlerta('Los campos son obligatorios', 'alerta-error');
             return;
         }
         //2.3.2-Password minimo de 6 caracteres para
         if (password.length < 6) {
-            console.log('El password debe tener al menos 6 caracteres');
+            mostrarAlerta('El password debe tener al menos 6 caracteres', 'alerta-error');
             return;
         }
         //2.3.3-Password y confirmar password deben ser iguales
         if (password !== confirmar) {
-            console.log('Los password no coinciden');
+            mostrarAlerta('Los password no coinciden', 'alerta-error');
             return;
         }
         //2.3.4-Pasarlo al action
+        registrarUsuario({nombre, email, password});
 
         //2.3.5-Redireccionar a la pantalla principal
 
@@ -51,6 +63,7 @@ const NuevaCuenta = () => {
 
     return ( 
         <div className="form-usuario">
+            { alerta ? ( <div className={`alerta ${alerta.categoria}`}> { alerta.msg } </div> ) : null }
             <div className="contenedor-form sombra-dark">
                 <h1>Obtener una Cuenta</h1>
                 <form onSubmit={onSubmit}>
@@ -93,7 +106,7 @@ const NuevaCuenta = () => {
                             type="password" 
                             id="confirmar" 
                             name="confirmar" 
-                            placeholder="TRepite tu Password" 
+                            placeholder="Repite tu Password" 
                             value={confirmar}
                             onChange={onChange}       
                         />
