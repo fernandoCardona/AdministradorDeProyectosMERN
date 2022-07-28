@@ -1,16 +1,27 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AlertaContext from '../../context/alertas/alertaContext';
 import AuthContext from '../../context/autenticacion/authContext';
 
 
-const NuevaCuenta = () => {
+const NuevaCuenta = (props) => {
     //2.4- Importar el context de alertas
     const alertaContext = useContext(AlertaContext);
     const {alerta, mostrarAlerta} = alertaContext;
 
     const authContext = useContext(AuthContext);
     const { mensaje, autenticado, registrarUsuario } = authContext;
+
+    //2.5- En caso de que el usuario ya este registrado o sea un registro duplicado 
+    useEffect(() => {
+        if(autenticado) {
+           props.history.push('/proyectos');
+        }
+        if(mensaje) {
+            mostrarAlerta(mensaje.msg, mensaje.categoria);
+        }
+        
+    }, [mensaje, autenticado, props.history]);
 
 
     //2.0-Generar estructura del formulario html

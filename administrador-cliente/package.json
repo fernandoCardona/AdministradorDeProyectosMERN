@@ -40,5 +40,5 @@
   },
   "devDependencies": {
     "uuid": "^4.0.1"
-  }
+  }  
 }
